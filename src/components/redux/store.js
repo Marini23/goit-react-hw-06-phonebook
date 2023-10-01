@@ -12,6 +12,7 @@ const initialState = {
   filter: ``,
 };
 
+console.log(initialState.filter);
 const enhancer = devToolsEnhancer();
 
 const rootReducer = (state = initialState, action) => {
@@ -28,6 +29,12 @@ const rootReducer = (state = initialState, action) => {
         contacts: state.contacts.filter(
           contact => contact.id !== action.payload
         ),
+      };
+    }
+    case `filter/changeFilter`: {
+      return {
+        ...state,
+        filter: action.payload,
       };
     }
     default:
@@ -49,6 +56,13 @@ export const deleteContact = contactId => {
   return {
     type: 'contacts/deleteContact',
     payload: contactId,
+  };
+};
+
+export const changeFilter = newFilter => {
+  return {
+    type: `filter/changeFilter`,
+    payload: newFilter,
   };
 };
 
