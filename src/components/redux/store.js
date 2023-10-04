@@ -1,69 +1,10 @@
-import { createStore } from 'redux';
-import { devToolsEnhancer } from '@redux-devtools/extension';
-import { nanoid } from 'nanoid';
+import { configureStore } from '@reduxjs/toolkit';
+import { contactsReducer } from './contactsSlice';
+import { filterReducer } from './filterSlice';
 
-const initialState = {
-  contacts: [
-    { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-    { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-    { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-    { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-  ],
-  filter: ``,
-};
-
-console.log(initialState.filter);
-const enhancer = devToolsEnhancer();
-
-const rootReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case 'contacts/addContact': {
-      return {
-        ...state,
-        contacts: [...state.contacts, action.payload],
-      };
-    }
-    case 'contacts/deleteContact': {
-      return {
-        ...state,
-        contacts: state.contacts.filter(
-          contact => contact.id !== action.payload
-        ),
-      };
-    }
-    case `filter/changeFilter`: {
-      return {
-        ...state,
-        filter: action.payload,
-      };
-    }
-    default:
-      return state;
-  }
-};
-
-export const addContact = newContact => {
-  return {
-    type: 'contacts/addContact',
-    payload: {
-      id: nanoid(),
-      ...newContact,
-    },
-  };
-};
-
-export const deleteContact = contactId => {
-  return {
-    type: 'contacts/deleteContact',
-    payload: contactId,
-  };
-};
-
-export const changeFilter = newFilter => {
-  return {
-    type: `filter/changeFilter`,
-    payload: newFilter,
-  };
-};
-
-export const store = createStore(rootReducer, enhancer);
+export const store = configureStore({
+  reducer: {
+    contacts: contactsReducer,
+    filter: filterReducer,
+  },
+});

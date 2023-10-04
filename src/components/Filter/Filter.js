@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { Input, Title, Label } from './Filter.styled';
-import { changeFilter } from 'components/redux/store';
+import { changeFilter } from 'components/redux/filterSlice';
 
 export const Filter = ({ onChangeFilter }) => {
   const dispatch = useDispatch();
