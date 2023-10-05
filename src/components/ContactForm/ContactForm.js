@@ -7,8 +7,8 @@ import {
   StyledButton,
   ErrorMsg,
 } from './ContactForm.styled';
-import { useDispatch } from 'react-redux';
-import { addContact } from 'components/redux/contactsSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact, getContacts } from 'components/redux/contactsSlice';
 
 const nameRegex = /[a-zA-Zа-яА-Я]+(([' ][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$/;
 
@@ -28,7 +28,8 @@ const formSchema = Yup.object().shape({
     .required('Required'),
 });
 
-export const ContactForm = ({ onAdd }) => {
+export const ContactForm = () => {
+  const contacts = useSelector(getContacts);
   const dispatch = useDispatch();
 
   return (
@@ -37,8 +38,13 @@ export const ContactForm = ({ onAdd }) => {
         initialValues={{ name: '', number: '' }}
         validationSchema={formSchema}
         onSubmit={(values, actions) => {
-          onAdd = () => dispatch(addContact(values));
-          onAdd();
+          const isExist = contacts.find(
+            contact => contact.name.toLowerCase() === values.name.toLowerCase()
+          );
+          if (isExist) {
+            return alert(`${values.name} is already in contacts!`);
+          }
+          dispatch(addContact(values));
           actions.resetForm();
         }}
       >
